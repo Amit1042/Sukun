@@ -1,0 +1,26 @@
+function getgroup()
+{
+	$.ajax  
+    ({  
+    	url: _spPageContextInfo.webAbsoluteUrl + "/_api/web/currentuser/groups",  
+    	method: "GET",  
+        headers: { "Accept": "application/json; odata=verbose" },  
+        success: function (data) 
+        {  
+       		var results = data.d.results; 
+       		var InnrHtmlgrp ="";  
+        	for (var i = 0; i < results.length; i++) 
+        	{  
+        		if( results[i].LoginName == "Restricted Readers")
+        		{
+        	  		$("#test").hide();
+        		}
+        		else if(results[i].LoginName == "Excalibur Members")
+        		{
+        	  		$("#test2").hide();
+        		}  
+        	}  
+                
+        }  
+    }); 
+}
