@@ -1,0 +1,10 @@
+  protected void GET_DETAILS_Click(object sender, EventArgs e)
+        {
+            mygrid.Visible = true;
+            SPWeb web = SPContext.Current.Web;
+            SPList list = web.Lists["Employee_Master"];
+            SPListItemCollection items = list.Items;
+            mygrid.DataSource = items.GetDataTable();
+            mygrid.DataBind();
+            
+        }
