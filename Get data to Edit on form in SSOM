@@ -1,0 +1,50 @@
+ protected void EDIT_Click(object sender, EventArgs e)
+        {
+            SAVE.Text = "Update";
+            if (string.IsNullOrEmpty(Employee_ID.Text))
+            {
+                Employee_ID.Enabled = true;
+
+            }
+            else
+            {
+                Employee_ID.Enabled = false;
+            }
+
+            using (SPSite _Site = new SPSite(_url))
+            {
+                using (SPWeb _Web = _Site.OpenWeb())
+                {
+
+                    SPList _List = _Web.Lists["Employee_Master"];
+                    SPQuery query = new SPQuery();
+                    query.Query = string.Format(@"<Where>
+                                      <Eq>
+                                         <FieldRef Name='EMPLOYEE_ID' />
+                                         <Value Type='Text'>EMP18/{0}</Value>
+                                      </Eq>
+                                   </Where>", Employee_ID.Text);
+                    SPListItemCollection _Item = _List.GetItems(query);
+                    Employee_Name.Text = Convert.ToString(_Item[0]["EMPLOYEE_NAME"]);
+                    Gender.Text = Convert.ToString(_Item[0]["GENDER"]);
+                    Date_of_Birth.Text = Convert.ToDateTime(_Item[0]["DATE_OF_BIRTH"]).ToString("yyyy-MM-dd");
+                    Email_ID.Text = Convert.ToString(_Item[0]["EMAIL_ID"]);
+                    Employee_Status.Text = Convert.ToString(_Item[0]["EMPLOYEE_STATUS"]);
+                    Pancard_No.Text = Convert.ToString(_Item[0]["PANCARD_NO"]);
+                    Contact_No.Text = Convert.ToString(_Item[0]["CONTACT_NO"]);
+                    Previous_Employer.Text = Convert.ToString(_Item[0]["PREVIOUS_EMPLOYEER"]);
+                    Date_of_Joining.Text = Convert.ToDateTime(_Item[0]["DATE_OF_JOINING"]).ToString("yyyy-MM-dd");
+                    string check = Convert.ToString(_Item[0]["TECHNICAL_SKILLS"]);
+                    string[] selectedItems = check.Split(',');
+                    for (int b = 0; b < selectedItems.Length; b++)
+                    {
+                        for (int a = 0; a < Technical_Skills.Items.Count; a++)
+                        {
+                            if (Technical_Skills.Items[a].ToString() == selectedItems[b].ToString())
+                                Technical_Skills.Items[a].Selected = true;
+                        }
+                    }
+                    Address.Text = Convert.ToString(_Item[0]["ADDRESS"]);
+                }
+            }
+        }
