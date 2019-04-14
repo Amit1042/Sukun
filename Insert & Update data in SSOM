@@ -1,0 +1,97 @@
+protected void SAVE_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(Employee_ID.Text))
+            {
+                Page.Response.Write("<script>alert('Enter Details to Save Records')</script>");
+
+            }
+            else
+            {
+                //----------------------------------------------------------------------------------
+                string text2show = String.Empty;
+                for (int a = 0; a < Technical_Skills.Items.Count; a++)
+                {
+                    if (Technical_Skills.Items[a].Selected == true)
+                        text2show += Technical_Skills.Items[a].ToString() + ',';
+                }
+                text2show = text2show.Substring(0, text2show.Length - 1);
+                string Tech_Skill = text2show;
+                //-------------------------------------------------------------------------------
+                if (Employee_ID.Enabled == true)
+                {
+                    using (SPSite oSite = new SPSite(_url))
+                    {
+                        using (SPWeb oWeb = oSite.RootWeb)
+                        {
+                            SPList oList = oWeb.Lists["Employee_Master"];
+                            SPListItem n_ListItem = oList.Items.Add();
+                            n_ListItem["EMPLOYEE_ID"] = "EMP18/" + Employee_ID.Text;
+                            n_ListItem["EMPLOYEE_NAME"] = Employee_Name.Text;
+                            n_ListItem["GENDER"] = Gender.Text;
+                            n_ListItem["DATE_OF_BIRTH"] = Convert.ToString(Date_of_Birth.Text);
+                            n_ListItem["EMAIL_ID"] = Email_ID.Text;
+                            n_ListItem["EMPLOYEE_STATUS"] = Employee_Status.Text;
+                            n_ListItem["PANCARD_NO"] = Pancard_No.Text;
+                            n_ListItem["CONTACT_NO"] = Contact_No.Text;
+                            n_ListItem["PREVIOUS_EMPLOYEER"] = Previous_Employer.Text;
+                            n_ListItem["DATE_OF_JOINING"] = Convert.ToDateTime(Date_of_Joining.Text);
+                            n_ListItem["TECHNICAL_SKILLS"] = Tech_Skill.ToString();
+                            n_ListItem["ADDRESS"] = Address.Text;
+                            n_ListItem["Temp_Id"] = Employee_ID.Text;
+                            n_ListItem.Update();
+                            EmptyTextbox();
+                            // Page.Response.Redirect(Page.Request.Url.ToString(), true);                    
+                        }
+                    }
+                    Page.Response.Write("<script>alert('Item Created successfully')</script>");
+                }
+                else
+                {//----------------------------------------------------------------------------------
+                    string text3show = String.Empty;
+                    for (int a = 0; a < Technical_Skills.Items.Count; a++)
+                    {
+                        if (Technical_Skills.Items[a].Selected == true)
+                            text3show += Technical_Skills.Items[a].ToString() + ',';
+                    }
+                    text3show = text3show.Substring(0, text3show.Length - 1);
+                    string Tech_Skill_update = text3show;
+                    //-------------------------------------------------------------------------------
+                    using (SPSite _Site = new SPSite(_url))
+                    {
+                        using (SPWeb _Web = _Site.OpenWeb())
+                        {
+
+                            SPList _List = _Web.Lists["Employee_Master"];
+                            SPQuery query = new SPQuery();
+                            query.Query = string.Format(@"<Where>
+                                      <Eq>
+                                         <FieldRef Name='EMPLOYEE_ID' />
+                                         <Value Type='Text'>EMP18/{0}</Value>
+                                      </Eq>
+                                   </Where>", Employee_ID.Text);
+
+                            SPListItemCollection _Item = _List.GetItems(query);
+
+                            SPListItem item = _Item[0];
+                            item["EMPLOYEE_NAME"] = Employee_Name.Text;
+                            item["GENDER"] = Gender.Text;
+                            item["DATE_OF_BIRTH"] = Convert.ToString(Date_of_Birth.Text);
+                            item["EMAIL_ID"] = Email_ID.Text;
+                            item["EMPLOYEE_STATUS"] = Employee_Status.Text;
+                            item["PANCARD_NO"] = Pancard_No.Text;
+                            item["CONTACT_NO"] = Contact_No.Text;
+                            item["PREVIOUS_EMPLOYEER"] = Previous_Employer.Text;
+                            item["DATE_OF_JOINING"] = Convert.ToDateTime(Date_of_Joining.Text);
+                            item["TECHNICAL_SKILLS"] = Tech_Skill_update.ToString();
+                            item["ADDRESS"] = Address.Text;
+                            item.Update();
+                            //EmptyTextbox();
+                            Page.Response.Write("<script>alert('RECORD UPDATED SUCCESSFULLY')</script>");
+                         }
+                    }
+                    
+                }
+            }
+            Page.Response.Redirect(Page.Request.Url.ToString(), true);
+           
+        }
