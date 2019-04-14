@@ -1,0 +1,33 @@
+protected void NEW_Click(object sender, EventArgs e)
+        {
+           // 
+            try
+            {
+                
+                using (SPSite _Site = new SPSite(SPContext.Current.Web.Url))
+                {
+                    using (SPWeb _Web = _Site.OpenWeb())
+                    {
+
+                        SPList _List = _Web.Lists["Employee_Master"];
+                        SPQuery query = new SPQuery();
+                        query.Query = string.Format(@"<OrderBy><FieldRef Name='Temp_Id' Ascending='False' /></OrderBy>");
+                        query.RowLimit = 1;
+                        SPListItemCollection _Item = _List.GetItems(query);
+                        if (_Item.Count!=0)
+                        {
+                            Employee_ID.Text = (Convert.ToDouble(_Item[0]["Temp_Id"]) + 1).ToString();
+                        }
+                        else
+                        {
+                            Employee_ID.Text = "101";
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Page.Response.Write("<script>alert('Something Happened." + ex.Message + "')</script>");
+            }
+        }
