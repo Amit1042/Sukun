@@ -1,0 +1,15 @@
+public void EmptyTextbox()
+        {
+            Employee_ID.Text = string.Empty;
+            Employee_Name.Text = string.Empty;
+            Gender.Text = string.Empty;
+            Date_of_Birth.Text = string.Empty;
+            Email_ID.Text = string.Empty;
+            Employee_Status.Text = string.Empty;
+            Pancard_No.Text = string.Empty;
+            Contact_No.Text = string.Empty;
+            Previous_Employer.Text = string.Empty;
+            Date_of_Joining.Text = string.Empty;
+            Technical_Skills.Text = string.Empty;
+            Address.Text = string.Empty;
+        }
