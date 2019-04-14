@@ -1,0 +1,21 @@
+ protected void DELETE_Click(object sender, EventArgs e)
+        {
+            using (SPSite _Site = new SPSite(_url))
+            {
+                using (SPWeb _Web = _Site.OpenWeb())
+                {
+                    SPList _List = _Web.Lists["Employee_Master"];
+                    SPQuery query = new SPQuery();
+                    query.Query = string.Format(@"<Where>
+                                      <Eq>
+                                         <FieldRef Name='EMPLOYEE_ID' />
+                                         <Value Type='Text'>EMP18/{0}</Value>
+                                      </Eq>
+                                   </Where>", Employee_ID.Text);
+
+                    SPListItemCollection _Item = _List.GetItems(query);
+                    _Item[0].Delete();
+                    Page.Response.Write("<script>alert('Data Deleted successfully')</script>");
+                }
+            }
+        }
