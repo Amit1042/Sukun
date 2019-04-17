@@ -1,0 +1,44 @@
+var Tempval= '';
+ var lastID='';	
+ var ID='';
+ 
+ 
+ 
+ 			function unique() 
+ 			{
+ 			var testb=$("#batch_no").val();
+ 			if(testb.length>0)
+ 			{
+             $.ajax({
+             	url: _spPageContextInfo.webAbsoluteUrl + "/_api/web/Lists/GetByTitle('Candidate')/items?$select=Title&$orderby=ID%20desc&$top=1",
+                 type: "GET",
+                 headers: { "accept": "application/json;odata=verbose" },
+                 success: (function (data, textStatus, jqXHR) {
+                    var result = data.d.results;
+                    if(result.length>0)
+                    {
+ 		   				Tempval=result[0].Title;
+ 		   				//alert(Tempval);
+ 						lastID = Tempval.slice(9);					
+ 						ID=parseInt(lastID)+1;
+ 						var nid = ("000" + ID).substr(-4);
+ 						var batch = ("00" + testb).substr(-3);
+ 						$("#uid").val("SPIQ/"+batch+"/"+nid);
+
+ 					 }
+ 					 else 
+ 					 {alert("No ID"); 
+ 					 ID="1";
+                     //var testb="25"; 
+ 					var nid = ("000" + ID).substr(-4);
+ 					var batch = ("00" + testb).substr(-3);
+ 					$("#uid").val("SPIQ/"+batch+"/"+nid);
+ 					}
+							   
+                 }),
+                 error: (function (xhr, ajaxOptions, thrownError) {
+                     alert('Request failed: ' + xhr.status + '\n' + thrownError + '\n' + xhr.responseText);
+                 })
+             });
+			}
+         }
